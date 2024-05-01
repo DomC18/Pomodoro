@@ -1,15 +1,27 @@
+from screeninfo import get_monitors
 import tkinter as tk
 
 def exit(event) -> None:
     root.destroy()
 
+APP_WIDTH = 800
+APP_HEIGHT = 500
+MONITOR = get_monitors()[0]
+MONITOR_WIDTH_OFFSET = int((MONITOR.width/2)-(APP_WIDTH/2))
+MONITOR_HEIGHT_OFFSET = int((MONITOR.height/2)-(APP_HEIGHT/2))
+
 root = tk.Tk()
 root.title("Pomodoro Timer")
-root.geometry("800x500+560+290")
+root.geometry(f"{APP_WIDTH}x{APP_HEIGHT}+{MONITOR_WIDTH_OFFSET}+{MONITOR_HEIGHT_OFFSET}")
 root.resizable(width=False, height=False)
 root.configure(bg="red")
 root.bind("<Escape>", exit)
 
+def get_focus() -> int:
+    return int(focus_var.get())
+
+def get_break() -> int:
+    return int(break_var.get())
 
 focus_var = tk.StringVar()
 focus_var.set("25")
