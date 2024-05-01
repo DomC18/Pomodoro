@@ -7,8 +7,8 @@ sys.setrecursionlimit(10**6)
 def exit(event) -> None:
     root.destroy()
 
-APP_WIDTH = 800
-APP_HEIGHT = 500
+APP_WIDTH = 960
+APP_HEIGHT = 620
 MONITOR = get_monitors()[0]
 MONITOR_WIDTH_OFFSET = int((MONITOR.width/2)-(APP_WIDTH/2))
 MONITOR_HEIGHT_OFFSET = int((MONITOR.height/2)-(APP_HEIGHT/2))
@@ -33,17 +33,33 @@ break_var.set("5")
 time_var = tk.StringVar()
 time_var.set("00:00")
 
+should_count = False
+timer_time = 0
+
 def start_timer() -> None:
-    time = get_focus() * 60
-    time_var.set(f"{time//60:02d}:{time%60:02d}")
-    time -= 1
-    root.after(1000, start_timer)
+    global should_count, timer_time
+    should_count = True
+    timer_time = (get_focus()*60)+1
 
 def stop_timer() -> None:
-    ...
+    global should_count
+    should_count = False
+
+def timer_count() -> None:
+    global should_count, timer_time
+    if should_count:
+        timer_time -= 1
+        time_var.set(f"{timer_time//60:02}:{timer_time%60:02}")
+    else:
+        time_var.set("00:00")
+        timer_time = 0
+    root.after(1000, timer_count)
 
 def reset_timer() -> None:
-    ...
+    global timer_time
+    timer_time = 0
+    stop_timer()
+    time_var.set("00:00")
 
 title_label = tk.Label(root, text="Pomidoro Timer", justify="center", font=("Times New Roman", 55, "bold"), bg="red")
 title_label.place(relx=0.5, rely=0.1, anchor="center")
@@ -59,16 +75,16 @@ break_option.configure(bd=0, justify="center", font=("Times New Roman", 30, "bol
 break_option.place(relx=3/4, rely=0.375, anchor="center")
 timer_label = tk.Label(root, textvariable=time_var, justify="center", font=("Times New Roman", 80, "bold"))
 timer_label.place(relx=0.5, rely=0.6, anchor="center")
-reset_button = tk.Button(root, text="Reset Timer", justify="center", font=("Times New Roman", 30, "bold"))
+reset_button = tk.Button(root, text="Reset", justify="center", font=("Times New Roman", 30, "bold"))
 reset_button.configure(command=reset_timer)
 reset_button.place(relx=1/6, rely=0.85, anchor="center")
-start_button = tk.Button(root, text="Start Timer", justify="center", font=("Times New Roman", 30, "bold"))
+start_button = tk.Button(root, text="Start", justify="center", font=("Times New Roman", 30, "bold"))
 start_button.configure(command=start_timer)
 start_button.place(relx=2/4, rely=0.85, anchor="center")
-stop_button = tk.Button(root, text="Stop Timer", justify="center", font=("Times New Roman", 30, "bold"))
+stop_button = tk.Button(root, text="Stop", justify="center", font=("Times New Roman", 30, "bold"))
 stop_button.configure(command=stop_timer)
 stop_button.place(relx=5/6, rely=0.85, anchor="center")
 
-root.after(1000, start_timer)
+root.after(1000, timer_count)
 
 root.mainloop()
