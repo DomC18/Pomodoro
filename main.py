@@ -1,5 +1,5 @@
 from screeninfo import get_monitors
-import tkinter as tk
+import customtkinter as ctk
 import pygame as pyg
 import sys
 import os
@@ -19,9 +19,11 @@ APP_HEIGHT = 620
 MONITOR_WIDTH_OFFSET = int((get_monitors()[0].width/2)-(APP_WIDTH/2))
 MONITOR_HEIGHT_OFFSET = int((get_monitors()[0].height/2)-(APP_HEIGHT/2))
 
-root = tk.Tk(); root.configure(bg="red"); root.bind("<Escape>", exit); root.resizable(width=False, height=False)
+root = ctk.CTk("red")
 root.title("Pomodoro Timer")
+root.resizable(width=False, height=False)
 root.geometry(f"{APP_WIDTH}x{APP_HEIGHT}+{MONITOR_WIDTH_OFFSET}+{MONITOR_HEIGHT_OFFSET}")
+root.bind("<Escape>", exit)
 
 def get_focus() -> int:
     return int(focus_var.get())
@@ -29,11 +31,11 @@ def get_focus() -> int:
 def get_break() -> int:
     return int(break_var.get())
 
-focus_var = tk.StringVar()
+focus_var = ctk.Variable()
 focus_var.set("25")
-break_var = tk.StringVar()
+break_var = ctk.Variable()
 break_var.set("5")
-time_var = tk.StringVar()
+time_var = ctk.Variable()
 time_var.set("00:00")
 
 should_count = False
@@ -72,27 +74,25 @@ def reset_timer() -> None:
     stop_timer()
     time_var.set("00:00")
 
-title_label = tk.Label(root, text="Pomidoro Timer", justify="center", font=("Times New Roman", 55, "bold"), bg="red")
+title_label = ctk.CTkLabel(root, text="Pomodoro Timer", justify="center", font=("Times New Roman", 55, "bold"), bg_color="red")
 title_label.place(relx=0.5, rely=0.1, anchor="center")
-focus_label = tk.Label(root, text="Focus Time (Minutes)", justify="center", font=("Times New Roman", 25), bg="red")
+focus_label = ctk.CTkLabel(root, text="Focus Time (Minutes)", justify="center", font=("Times New Roman", 25), bg_color="red")
 focus_label.place(relx=1/4, rely=0.275, anchor="center")
-focus_option = tk.OptionMenu(root, focus_var, "1", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60")
-focus_option.configure(bd=0, justify="center", font=("Times New Roman", 30, "bold"), bg="red")
+focus_option = ctk.CTkOptionMenu(master=root, variable=focus_var, font=("Times New Roman", 30, "bold"), bg_color="red", values=["1", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"])
 focus_option.place(relx=1/4, rely=0.375, anchor="center")
-break_label = tk.Label(root, text="Break Time (Minutes)", justify="center", font=("Times New Roman", 25), bg="red")
+break_label = ctk.CTkLabel(root, text="Break Time (Minutes)", font=("Times New Roman", 25), bg_color="red")
 break_label.place(relx=3/4, rely=0.275, anchor="center")
-break_option = tk.OptionMenu(root, break_var, "1", "2", "3", "4", "5", "10", "15", "20")
-break_option.configure(bd=0, justify="center", font=("Times New Roman", 30, "bold"), bg="red")
+break_option = ctk.CTkOptionMenu(master=root, variable=break_var, font=("Times New Roman", 30, "bold"), bg_color="red", values=["1", "2", "3", "4", "5", "10", "15", "20"])
 break_option.place(relx=3/4, rely=0.375, anchor="center")
-timer_label = tk.Label(root, textvariable=time_var, justify="center", font=("Times New Roman", 80, "bold"))
+timer_label = ctk.CTkLabel(root, textvariable=time_var, justify="center", font=("Times New Roman", 80, "bold"))
 timer_label.place(relx=0.5, rely=0.6, anchor="center")
-reset_button = tk.Button(root, text="Reset", justify="center", font=("Times New Roman", 30, "bold"))
+reset_button = ctk.CTkButton(root, text="Reset", font=("Times New Roman", 30, "bold"))
 reset_button.configure(command=reset_timer)
 reset_button.place(relx=1/6, rely=0.85, anchor="center")
-start_button = tk.Button(root, text="Start", justify="center", font=("Times New Roman", 30, "bold"))
+start_button = ctk.CTkButton(root, text="Start", font=("Times New Roman", 30, "bold"))
 start_button.configure(command=start_timer)
 start_button.place(relx=2/4, rely=0.85, anchor="center")
-stop_button = tk.Button(root, text="Stop", justify="center", font=("Times New Roman", 30, "bold"))
+stop_button = ctk.CTkButton(root, text="Stop", font=("Times New Roman", 30, "bold"))
 stop_button.configure(command=stop_timer)
 stop_button.place(relx=5/6, rely=0.85, anchor="center")
 
